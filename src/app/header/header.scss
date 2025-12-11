@@ -1,0 +1,17 @@
+@keyframes bell-shake {
+  0% { transform: rotate(0deg); }
+  15% { transform: rotate(15deg); }
+  30% { transform: rotate(-10deg); }
+  45% { transform: rotate(12deg); }
+  60% { transform: rotate(-8deg); }
+  75% { transform: rotate(6deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.logo-hover-shake img {
+  transition: transform 0.2s ease;
+}
+
+.logo-hover-shake:hover img {
+  animation: bell-shake 0.8s ease-in-out;
+}
