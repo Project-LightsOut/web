@@ -1,16 +1,16 @@
-import { Component } from '@angular/core';
-import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
-export class Header {
-  activeTab: string = '';
+export class Header implements OnInit {
+  activeTab = '';
 
-  constructor(private router: Router) {}
+  private readonly router = inject(Router);
 
   ngOnInit() {
     this.router.events.subscribe(event => {

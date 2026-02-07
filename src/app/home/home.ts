@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ImageLoader } from "../image-loader/image-loader";
 import BiggerPicture from 'bigger-picture';
+import { CloudDataService } from '../cloud-data-service';
+import { ImageItem } from '../model/ImageItem';
 
 @Component({
   selector: 'app-home',
@@ -10,11 +12,13 @@ import BiggerPicture from 'bigger-picture';
 })
 export class Home implements OnInit{
 
+  private readonly cloudService = inject(CloudDataService);
+
   bp = BiggerPicture({
     target: document.body
   });
 
-  items: any[] = [];
+  items: ImageItem[] = [];
 
   readonly mainImages: string[] = [
     "/assets/images/mainBanner_1.png",
@@ -24,19 +28,7 @@ export class Home implements OnInit{
     "/assets/images/mainBanner_5.png"
   ];
 
-  lastImages: string[] = [
-    "https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500",
-    "https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large",
-    "https://pbs.twimg.com/media/Gx8yea1WMAAknNj?format=jpg&name=large",
-    "https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096",
-    "https://pbs.twimg.com/media/G64RB24WoAA1pNy?format=jpg&name=large",
-    "https://pbs.twimg.com/media/G6tm73JXUAAJ4Ey?format=jpg&name=large",
-    "https://pbs.twimg.com/media/G6kBCoOXsAAxptq?format=jpg&name=large",
-    "https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large",
-    "https://pbs.twimg.com/media/G5XBAicWEAALHJ-?format=jpg&name=large",
-    "https://pbs.twimg.com/media/G10PCfyWwAAfLkj?format=jpg&name=4096x4096",
-    "https://pbs.twimg.com/media/GxEKz20XcAArxWq?format=jpg&name=large"
-  ];
+  lastImages: string[] = [];
 
   scrollToGallery() {
     const el = document.getElementById('showcase');
@@ -48,9 +40,25 @@ export class Home implements OnInit{
     });
   }
 
-  async ngOnInit() {
-    this.items = await this.buildItems();
+  ngOnInit() {
+    this.cloudService.getCloudData().subscribe(async data => {
+      const firstTenPosts = data.posts.slice(0, 10);
+      this.lastImages = firstTenPosts
+        .map(p => p.images.length > 0 ? `${data.baseUrl}${p.images[0]}` : null)
+        .filter(img => img !== null);
+
+      this.buildItems().then(items => {
+        this.items = items.map(item => ({
+          img: item.img,
+          width: item.width,
+          height: item.height,
+          alt: item.alt,
+          title: item.title
+        }));
+      });
+    });
   }
+
 
 
   open(index: number) {
@@ -70,7 +78,8 @@ export class Home implements OnInit{
           img,
           width: w,
           height: h,
-          alt: 'imagen'
+          alt: 'imagen',
+          title: ''
         };
       })
     );

@@ -1,190 +1,48 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Post } from '../model/Post';
 import { ImageLoader } from "../image-loader/image-loader";
+import { CloudDataService } from '../cloud-data-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-posters',
   imports: [ImageLoader],
   templateUrl: './posters.html',
-  styleUrl: './posters.scss',
+  styleUrl: './posters.scss'
 })
 export class Posters implements OnInit {
-  // Sample data - replace with your actual data source
-  posts: Post[] = [
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
-    new Post(1, 'Robot Prototype', 'Advanced AI robot prototype', '2024-01-15', 'robotics', ['https://pbs.twimg.com/profile_banners/1447588358071504898/1758074227/1500x500']),
-    new Post(2, 'Neural Network', 'Deep learning architecture', '2024-01-14', 'ai', ['https://pbs.twimg.com/media/G1QPHrpXoAA9Zig?format=jpg&name=large']),
-    new Post(3, 'Quantum Computer', 'Next generation computing', '2024-01-13', 'quantum', ['https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096']),
-    new Post(4, 'Cyborg Design', 'Human-machine interface', '2024-01-12', 'cyborg', ['https://pbs.twimg.com/media/G6PTxt2XQAATqzw?format=jpg&name=large']),
 
-    // Add more posts as needed
-  ];
+  private readonly cloudService = inject(CloudDataService);
+  private readonly router = inject(Router);
+  
+  posts: Post[] = [];
 
-  categories: string[] = ['robotics', 'ai', 'quantum', 'cyborg'];
-  selectedCategory: string = '';
-  searchQuery: string = '';
+  categories: string[] = [];
+  selectedCategory = '';
+  searchQuery = '';
   filteredPosts: Post[] = [];
   
   // Pagination
-  currentPage: number = 1;
-  pageSize: number = 15;
-  totalPages: number = 1;
+  currentPage = 1;
+  pageSize = 15;
+  totalPages = 1;
 
   ngOnInit() {
-    this.filteredPosts = [...this.posts];
-    this.updatePagination();
+    this.cloudService.getCloudData().subscribe(data => {
+      this.posts = data.posts.map(
+        p => new Post(
+          p.id,
+          p.title,
+          p.description,
+          p.publicationDate,
+          p.category,
+          p.images.map(img => `${data.baseUrl}${img}`)
+        )
+      );
+      this.categories = data.categories;
+      this.filteredPosts = [...this.posts];
+      this.updatePagination();
+    });
   }
 
   selectCategory(category: string) {
@@ -205,8 +63,11 @@ export class Posters implements OnInit {
   }
 
   performSearch() {
+    //TODO: Implement correct search
     this.currentPage = 1;
     this.filterPosts();
+    console.log('Search performed for query:', this.searchQuery);
+    console.log('Filtered posts:', this.filteredPosts);
   }
 
   filterPosts() {
@@ -290,8 +151,10 @@ export class Posters implements OnInit {
   }
 
   openImage(post: Post) {
-    // Implement your image opening logic here
-    console.log('Opening image:', post);
+    this.router.navigate(
+      ['poster-detail'],
+      { state: { post } }
+    );
   }
 
   getCategoryButtonClass(category: string): string {

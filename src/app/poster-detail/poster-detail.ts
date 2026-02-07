@@ -1,55 +1,58 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Post } from '../model/Post';
-import { BiggerPictureInstance } from 'bigger-picture';
 import { ImageLoader } from "../image-loader/image-loader";
 import * as AOS from 'aos';
+import BiggerPicture from 'bigger-picture';
+import { DatePipe } from '@angular/common';
+import { ImageItem } from '../model/ImageItem';
 
 @Component({
   selector: 'app-poster-detail',
-  imports: [ImageLoader],
+  imports: [ImageLoader, DatePipe],
   templateUrl: './poster-detail.html',
   styleUrl: './poster-detail.scss',
 })
 export class PosterDetail implements OnInit {
-  readonly examplePost = new Post(
-    1,
-    'Quantum Neural Interface Prototype',
-    'Revolutionary interface combining quantum computing with neural networks for unprecedented brain-machine communication speeds. This prototype demonstrates the future of human-AI symbiosis with real-time thought processing capabilities.',
-    '2024-01-15',
-    'quantum',
-    [
-      "https://pbs.twimg.com/media/Gx8yea1WMAAknNj?format=jpg&name=large",
-      "https://pbs.twimg.com/media/G3BdW2mXQAAo9-q?format=jpg&name=4096x4096",
-      "https://pbs.twimg.com/media/G64RB24WoAA1pNy?format=jpg&name=large",
-      "https://pbs.twimg.com/media/G6tm73JXUAAJ4Ey?format=jpg&name=large",
-      "https://pbs.twimg.com/media/G6kBCoOXsAAxptq?format=jpg&name=large"
-    ]
-  );
-  post: Post | null = null;
-  items: any[] = [];
-  private posts: Post[] = [];
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router
-  ) { }
+
+  private readonly router = inject(Router);
+
+  post: Post | null = null;
+  items: ImageItem[] = [];
+  bp = BiggerPicture({
+    target: document.body
+  });
 
   ngOnInit() {
-    const id = this.route.snapshot.params['id'];
-    this.loadPost(id);
-    AOS.init();
-    
-    this.post = this.examplePost;
-  }
+    const state = history.state as { post?: Post };
 
-  async loadPost(id: string | number) {
-    // Cargar post desde tu servicio o array
-    this.post = this.posts.find(p => p.id === +id) || null;
-
-    if (this.post?.images?.length) {
-      this.items = await this.buildItems();
+    if (!state?.post) {
+      this.router.navigate(['/']);
+      return;
     }
+
+    this.post = new Post(
+      state.post.id,
+      state.post.title,
+      state.post.description,
+      state.post.publicationDate,
+      state.post.category,
+      state.post.images
+    );
+
+
+    this.buildItems().then(items => {
+      this.items = items.map(item => ({
+        img: item.img,
+        width: item.width,
+        height: item.height,
+        alt: item.title ?? '',
+        title: item.title ?? ''
+      }));
+  
+      AOS.init();
+    });
   }
 
   async buildItems() {
@@ -78,9 +81,10 @@ export class PosterDetail implements OnInit {
   }
 
   open(index: number) {
-    if (this.items.length > 0) {
-
-    }
+    this.bp.open({
+      position: index,
+      items: this.items
+    });
   }
 
   goBack() {

@@ -8,11 +8,12 @@
   </div>
   }
   <img
-    [src]="src"
+    src="{{ src }}"
+    alt="Loaded"
     [class]="className"
     class="transition-opacity duration-300"
     [class.opacity-0]="!loaded"
     (load)="loaded = true"
     [hidden]="!loaded"
-  />
+  >
 </div>

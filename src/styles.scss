@@ -1,12 +1,12 @@
 @use "tailwindcss" as *;
 @use "flowbite/src/themes/default" as *;
+@use "bigger-picture/css" as *;
 
 @plugin "flowbite/plugin";
 
 @source "../node_modules/flowbite-angular";
 @source "../node_modules/flowbite";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-@import "bigger-picture/css";
 
 @keyframes pulse-glow {
   0% { box-shadow:0 0 0px #0071FF; }
