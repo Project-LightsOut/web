@@ -3,10 +3,11 @@ import { Post } from '../model/Post';
 import { ImageLoader } from "../image-loader/image-loader";
 import { CloudDataService } from '../cloud-data-service';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-posters',
-  imports: [ImageLoader],
+  imports: [ImageLoader, FormsModule],
   templateUrl: './posters.html',
   styleUrl: './posters.scss'
 })

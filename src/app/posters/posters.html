@@ -33,6 +33,8 @@
           <input
             type="text"
             placeholder="Search posters by name..."
+            [(ngModel)]="searchQuery"
+            (input)="onSearchChange()"
             class="w-full px-6 py-4 rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500/50 focus:border-yellow-500/30 transition-all duration-300 shadow-lg"
           />
           <button
