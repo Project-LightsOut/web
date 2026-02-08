@@ -61,7 +61,11 @@
         @for (image of post.images; track $index; let i = $index) {
           <div
             data-aos="zoom-in-up"
+            role="button"
+            tabindex="0"
             (click)="open(i)"
+            (keydown.enter)="open(i)"
+            (keydown.space)="open(i)"
             class="cursor-pointer group relative overflow-hidden rounded-xl border-2 border-gray-700/50 hover:border-yellow-500/40 bg-gradient-to-br from-gray-900/50 to-black/50 shadow-lg hover:shadow-xl hover:shadow-yellow-500/10 transition-all duration-500"
           >
             <app-image-loader
@@ -113,7 +117,7 @@
 
     <!-- Footer -->
     <div
-      class="mt-10 pt-6 border-t border-gray-800/50 flex flex-col md:flex-row justify-between items-center gap-4"
+      class="mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4"
     >
       <div class="text-gray-400">
         Category:

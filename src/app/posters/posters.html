@@ -67,6 +67,10 @@
       @for(post of getCurrentPagePosts(); track post.id; let i = $index) {
         <div
           (click)="openImage(post)"
+          (keydown.enter)="openImage(post)"
+          (keydown.space)="openImage(post)"
+          role="button"
+          tabindex="0"
           class="cursor-pointer group relative overflow-hidden rounded-xl border-2 border-gray-700/50 hover:border-yellow-500/40 bg-gradient-to-br from-gray-900/50 to-black/50 shadow-lg hover:shadow-xl hover:shadow-yellow-500/10 transition-all duration-500 hover:-translate-y-1"
         >
           <app-image-loader

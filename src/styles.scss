@@ -52,7 +52,7 @@ a.active button {
 
 .bg-tech-grid-3d {
   @apply bg-gradient-to-br from-white via-blue-800/20 to-pink-800/20
-         relative
+         relative min-h-dvh w-full
          overflow-hidden
          shadow-[inset_0_1px_0_rgba(0,0,0,0.05)];
   
