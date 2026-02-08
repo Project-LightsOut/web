@@ -21,11 +21,11 @@ export class Home implements OnInit{
   items: ImageItem[] = [];
 
   readonly mainImages: string[] = [
-    "/assets/images/mainBanner_1.png",
-    "/assets/images/mainBanner_2.png",
-    "/assets/images/mainBanner_3.png",
-    "/assets/images/mainBanner_4.png",
-    "/assets/images/mainBanner_5.png"
+    "assets/images/mainBanner_1.png",
+    "assets/images/mainBanner_2.png",
+    "assets/images/mainBanner_3.png",
+    "assets/images/mainBanner_4.png",
+    "assets/images/mainBanner_5.png"
   ];
 
   lastImages: string[] = [];
